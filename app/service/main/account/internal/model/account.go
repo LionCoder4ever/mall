@@ -4,7 +4,7 @@ import "github.com/jinzhu/gorm"
 
 type Account struct {
 	gorm.Model
-	Name   string `json:"name"`
+	Name   string `json:"name" binding:"required"`
 	Avatar string `json:"avatar"`
 	AccountPrivacy
 }
