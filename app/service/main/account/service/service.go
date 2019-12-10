@@ -8,7 +8,7 @@ import (
 
 type Service interface {
 	Close()
-	GetAccount(int) *model.Account
+	GetAccount(int) (*model.Account, error)
 	DelAccount(int) error
 	CreateAccount(*model.Account) (uint, error)
 }

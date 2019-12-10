@@ -12,23 +12,23 @@ func (h *hs) GetAccount(c *gin.Context) {
 		idFromQuery int
 		err         error
 	)
-	if idFromQuery, err = strconv.Atoi(c.Query("id")); err != nil {
+	if idFromQuery, err = strconv.Atoi(c.Param("id")); err != nil {
 		h.JSON(c, nil, err.Error())
 		return
 	}
-	result := h.srv.GetAccount(idFromQuery)
-	if result != nil {
-		h.JSON(c, result, "")
+	result, err := h.srv.GetAccount(idFromQuery)
+	if err != nil {
+		h.JSON(c, nil, err.Error())
 		return
 	}
-	h.JSON(c, nil, "id not found")
+	h.JSON(c, result, "")
 }
 
 func (h *hs) CreateAccount(c *gin.Context) {
 	var id uint
 	acc := new(model.Account)
 	if err := c.ShouldBindJSON(acc); err != nil {
-		h.JSON(c, nil, "json parse failed")
+		h.JSON(c, nil, fmt.Sprintf("json parse failed %s", err.Error()))
 		return
 	}
 	id, err := h.srv.CreateAccount(acc)

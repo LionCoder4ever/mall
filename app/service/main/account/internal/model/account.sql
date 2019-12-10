@@ -1,6 +1,8 @@
 CREATE TABLE `account`(
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'account id',
   `name` varchar(32) NOT NULL COMMENT 'account name ',
+  `email` varchar(15) NOT NULL DEFAULT '' COMMENT 'account email',
+  `password` varchar(60) NOT NULL DEFAULT '' COMMENT 'account password',
   `avatar` varchar(255) NOT NULL COMMENT 'account avatar',
   `created_at` timestamp  COMMENT 'account create time',
   `updated_at` timestamp  COMMENT 'account info update time',

@@ -1,27 +1,36 @@
 package dao
 
 import (
+	"errors"
 	"fmt"
 	"mall/app/service/main/account/internal/model"
 )
 
-func (d *Dao) GetAccount(id uint) *model.Account {
+func (d *Dao) GetAccount(id uint) (*model.Account, error) {
 	acc := new(model.Account)
-	d.db.First(acc, id)
-	return acc
+	if d.db.First(acc, id).RecordNotFound() {
+		return acc, errors.New("id not found")
+	}
+	return acc, nil
 }
 
 func (d *Dao) CreateAccount(acc *model.Account) (id uint, err error) {
+
 	if ok := d.db.NewRecord(acc); ok == false {
 		return 0, fmt.Errorf("primary key is not null")
 	}
-	d.db.Create(acc)
+	if err := d.db.Create(acc).Error; err != nil {
+		return 0, err
+	}
 	return acc.ID, nil
 }
 
 func (d *Dao) DelAccount(id uint) error {
 	acc := new(model.Account)
 	acc.ID = id
-	d.db.Delete(acc)
+	// set the delete_at field , use db.Unscoped().Delete() delete the row
+	if err := d.db.Delete(acc).Error; err != nil {
+		return err
+	}
 	return nil
 }
