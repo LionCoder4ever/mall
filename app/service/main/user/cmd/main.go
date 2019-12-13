@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+	// TODO use client from account api from http request
 	conn, err := grpc.Dial("localhost:9013", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("what htefuc %s ", err.Error())

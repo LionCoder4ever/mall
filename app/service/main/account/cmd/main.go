@@ -32,6 +32,7 @@ func main() {
 	go http.New(svc)
 
 	log.Info("prepare grpc server init success")
+	// TODO move start rpc server code
 	go func() {
 		lis, err := net.Listen("tcp", fmt.Sprintf(":%d", 9013))
 		if err != nil {
