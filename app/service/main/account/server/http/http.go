@@ -22,7 +22,7 @@ func New(svc service.Service) {
 	v1.GET("/acc/:id", h.GetAccount)
 	v1.GET("/delacc", h.DelAccount)
 	v1.POST("/createacc", h.CreateAccount)
-	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	go r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
 
 func (h *hs) JSON(c *gin.Context, data interface{}, errMsg string) {

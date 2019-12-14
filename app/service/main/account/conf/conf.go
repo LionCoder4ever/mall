@@ -5,18 +5,14 @@ import (
 	"fmt"
 	"github.com/BurntSushi/toml"
 	"mall/library/database/sql"
+	"mall/library/grpc"
 	"mall/library/log"
 )
 
 type Config struct {
-	Log *log.Config
-	//BM         *bm.ServerConfig
-	//Tracer     *trace.Config
-	//Memcache   *Memcache
+	Log   *log.Config
 	MySQL *sql.Config
-	//RPCClient2 *RPC
-	// grpc server
-	//WardenServer *warden.ServerConfig
+	Grpc  *grpc.Config
 }
 
 var (

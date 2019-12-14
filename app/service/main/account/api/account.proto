@@ -32,7 +32,7 @@ message AccountInfo {
     string name = 1;
     string email = 2;
     string password = 3;
-    string passwordReapt = 4[(gogoproto.moretags) = "binding:\"required\" gorm:\"-\""];
+    string passwordReapt = 4[(gogoproto.jsontag)= "repeat", (gogoproto.moretags)="binding:\"required\" gorm:\"-\""];
     string avatar = 5;
     AccountPrivacy account_privacy = 6;
     Model  model = 7;
