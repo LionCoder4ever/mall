@@ -14,6 +14,14 @@ func (d *Dao) GetAccount(id uint) (*model.Account, error) {
 	return acc, nil
 }
 
+func (d *Dao) GetAccountByName(name string) (*model.Account, error) {
+	acc := new(model.Account)
+	if d.db.Where("name = ?", name).First(acc).RecordNotFound() {
+		return acc, errors.New("id not found")
+	}
+	return acc, nil
+}
+
 func (d *Dao) CreateAccount(acc *model.Account) (id uint, err error) {
 
 	if ok := d.db.NewRecord(acc); ok == false {

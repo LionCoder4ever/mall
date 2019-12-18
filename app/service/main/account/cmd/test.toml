@@ -3,3 +3,6 @@
 
 [log]
     DEV = true
+
+[grpc]
+    arr = "localhost:9013"

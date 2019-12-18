@@ -11,6 +11,7 @@ type Service interface {
 	GetAccount(int) (*model.Account, error)
 	DelAccount(int) error
 	CreateAccount(*model.Account) (uint, error)
+	Login(string, string) (uint, error)
 }
 
 type service struct {
