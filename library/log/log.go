@@ -40,3 +40,7 @@ func Info(args ...interface{}) {
 func Infof(template string, args ...interface{}) {
 	Log.Infof(template, args)
 }
+
+func Fatalf(template string, args ...interface{}) {
+	Log.Fatalf(template, args)
+}
