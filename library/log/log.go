@@ -8,7 +8,8 @@ import (
 )
 
 type Config struct {
-	DEV        bool
+	DEV bool
+	// Filebeat input path
 	FILE       string
 	MAXSIZE    int
 	MAXBACKUPS int
