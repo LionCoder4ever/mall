@@ -1,5 +1,11 @@
 package ecode
 
+import (
+	"fmt"
+	"strconv"
+	"sync/atomic"
+)
+
 var (
 	_messages atomic.Value
 	_codes    = map[int]struct{}{}
@@ -15,6 +21,8 @@ func New(e int) Code {
 	}
 	return add(e)
 }
+
+func Int(i int) Code { return Code(i) }
 
 func add(e int) Code {
 	if _, ok := _codes[e]; ok {
