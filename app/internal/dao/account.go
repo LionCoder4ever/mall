@@ -3,7 +3,7 @@ package dao
 import (
 	"errors"
 	"fmt"
-	"mall/app/service/main/account/internal/model"
+	"mall/app/internal/model"
 )
 
 func (d *Dao) GetAccount(id uint) (*model.Account, error) {

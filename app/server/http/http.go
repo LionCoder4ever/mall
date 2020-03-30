@@ -3,19 +3,19 @@ package http
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"mall/app/service/main/account/service"
+	"mall/app/service"
 	"mall/library/jwt"
 	"net/http"
 )
 
 // http server
-type hs struct {
-	srv service.Service
+type httpServer struct {
+	srv *service.Service
 }
 
 // Init init
-func New(svc service.Service) {
-	h := &hs{
+func New(svc *service.Service) {
+	h := &httpServer{
 		srv: svc,
 	}
 	j, err := jwt.New(h.jwtAuthFunc)
@@ -23,20 +23,24 @@ func New(svc service.Service) {
 		panic(fmt.Sprintf("jwt middleware crate failed %s", err.Error()))
 	}
 	r := gin.Default()
+
 	v1 := r.Group("/v1")
-	v1.POST("/login", j.LoginHandler)
-	v1.GET("/acc/:id", h.GetAccount)
-	v1.POST("/createacc", h.CreateAccount)
 
 	auth := v1.Group("/auth")
 	auth.Use(j.MiddlewareFunc())
 	{
-		auth.GET("/delacc", h.DelAccount)
+		auth.GET("/del", h.DelAccount)
+		auth.GET("/account/:id", h.GetAccount)
 	}
+
+	v1.POST("/login", j.LoginHandler)
+	v1.POST("/register", h.CreateAccount)
+	v1.POST("/shop/register", h.CreateShop)
+	v1.GET("/shop/info/:id", h.GetShop)
 	go r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
 
-func (h *hs) JSON(c *gin.Context, data interface{}, errMsg string) {
+func (h *httpServer) JSON(c *gin.Context, data interface{}, errMsg string) {
 	// TODO custom error status code
 	c.JSON(http.StatusOK, gin.H{
 		"code":    0,
@@ -51,7 +55,7 @@ type Login struct {
 	Id       uint
 }
 
-func (h *hs) jwtAuthFunc(c *gin.Context) (interface{}, error) {
+func (h *httpServer) jwtAuthFunc(c *gin.Context) (interface{}, error) {
 	var json Login
 	if err := c.ShouldBindJSON(&json); err != nil {
 		return "", fmt.Errorf("error payload")

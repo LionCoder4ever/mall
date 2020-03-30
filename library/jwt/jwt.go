@@ -12,7 +12,7 @@ func New(f AuthFunc) (*jwt.GinJWTMiddleware, error) {
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:         "Realmname",
 		Key:           []byte("Secretkey"),
-		Timeout:       time.Hour * 12,
+		Timeout:       time.Minute * 1,
 		MaxRefresh:    time.Hour * 24,
 		Authenticator: f,
 		Unauthorized:  jwtUnAuthFunc,

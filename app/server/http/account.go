@@ -3,11 +3,11 @@ package http
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"mall/app/service/main/account/internal/model"
+	"mall/app/internal/model"
 	"strconv"
 )
 
-func (h *hs) GetAccount(c *gin.Context) {
+func (h *httpServer) GetAccount(c *gin.Context) {
 	var (
 		idFromQuery int
 		err         error
@@ -24,7 +24,7 @@ func (h *hs) GetAccount(c *gin.Context) {
 	h.JSON(c, result, "")
 }
 
-func (h *hs) CreateAccount(c *gin.Context) {
+func (h *httpServer) CreateAccount(c *gin.Context) {
 	var id uint
 	acc := new(model.Account)
 	if err := c.ShouldBindJSON(acc); err != nil {
@@ -39,7 +39,7 @@ func (h *hs) CreateAccount(c *gin.Context) {
 	h.JSON(c, id, "")
 }
 
-func (h *hs) DelAccount(c *gin.Context) {
+func (h *httpServer) DelAccount(c *gin.Context) {
 	var (
 		idFromQuery int
 		err         error

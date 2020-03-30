@@ -15,5 +15,6 @@ func NewSql(c *Config) (db *gorm.DB) {
 	if err != nil {
 		log.Fatal(fmt.Sprintf("db from %s opened failed", c.DSN))
 	}
+	db.SingularTable(true)
 	return
 }

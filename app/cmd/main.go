@@ -3,10 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"mall/app/service/main/account/conf"
-	gServer "mall/app/service/main/account/server/grpc"
-	"mall/app/service/main/account/server/http"
-	"mall/app/service/main/account/service"
+	"mall/app/conf"
+	"mall/app/server/http"
+	"mall/app/service"
 	"mall/library/log"
 	"os"
 	"os/signal"
@@ -27,7 +26,6 @@ func main() {
 	svc := service.New(&conf.Conf)
 	// init http server
 	http.New(svc)
-	gServer.New(svc)
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, syscall.SIGHUP, syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT)
 	for {

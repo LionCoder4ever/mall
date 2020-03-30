@@ -7,6 +7,3 @@
     MAXSIZE = 100
     MAXBACKUPS = 3
     MAXAGE = 1
-
-[grpc]
-    arr = "localhost:9013"
