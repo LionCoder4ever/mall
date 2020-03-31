@@ -17,10 +17,10 @@ type Config struct {
 }
 
 var (
-	Log *zap.SugaredLogger
+	Logger *zap.SugaredLogger
 )
 
-func New(c *Config) {
+func NewLogger(c *Config) {
 	var options []zap.Option
 
 	fileHandler := zapcore.AddSync(&lumberjack.Logger{
@@ -43,8 +43,8 @@ func New(c *Config) {
 		EncodeDuration: zapcore.SecondsDurationEncoder,
 		EncodeCaller:   zapcore.ShortCallerEncoder,
 	}
-	// add caller and remove wrapped file
-	options = append(options, zap.AddCallerSkip(1), zap.AddCaller())
+	// add caller
+	options = append(options, zap.AddCaller())
 	// Join the outputs, encoders, and level-handling functions into
 	// zapcore.Cores, then tee the four cores together.
 	coreTee := zapcore.NewTee(
@@ -55,17 +55,5 @@ func New(c *Config) {
 		),
 		zapcore.NewCore(zapcore.NewConsoleEncoder(zap.NewDevelopmentEncoderConfig()), zapcore.Lock(os.Stdout), zap.DebugLevel),
 	)
-	Log = zap.New(coreTee, options...).Sugar()
-}
-
-func Info(args ...interface{}) {
-	Log.Info(args)
-}
-
-func Infof(template string, args ...interface{}) {
-	Log.Infof(template, args)
-}
-
-func Fatalf(template string, args ...interface{}) {
-	Log.Fatalf(template, args)
+	Logger = zap.New(coreTee, options...).Sugar()
 }

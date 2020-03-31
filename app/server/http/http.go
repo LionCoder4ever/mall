@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"mall/app/service"
 	"mall/library/jwt"
+	"mall/library/log/middleware"
 	"net/http"
 )
 
@@ -22,8 +23,9 @@ func New(svc *service.Service) {
 	if err != nil {
 		panic(fmt.Sprintf("jwt middleware crate failed %s", err.Error()))
 	}
-	r := gin.Default()
-
+	r := gin.New()
+	r.Use(middleware.LoggerWithZap())
+	r.Use(middleware.RecoveryWithZap())
 	v1 := r.Group("/v1")
 
 	auth := v1.Group("/auth")
@@ -35,8 +37,8 @@ func New(svc *service.Service) {
 
 	v1.POST("/login", j.LoginHandler)
 	v1.POST("/register", h.CreateAccount)
-	v1.POST("/shop/register", h.CreateShop)
-	v1.GET("/shop/info/:id", h.GetShop)
+	//v1.POST("/shop/register", h.CreateShop)
+	//v1.GET("/shop/info/:id", h.GetShop)
 	go r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
 
