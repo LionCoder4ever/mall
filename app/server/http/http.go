@@ -9,6 +9,8 @@ import (
 	"net/http"
 )
 
+const apiversion = "/v1"
+
 // http server
 type httpServer struct {
 	srv *service.Service
@@ -19,20 +21,22 @@ func New(svc *service.Service) {
 	h := &httpServer{
 		srv: svc,
 	}
+
 	j, err := jwt.New(h.jwtAuthFunc)
 	if err != nil {
 		panic(fmt.Sprintf("jwt middleware crate failed %s", err.Error()))
 	}
+
 	r := gin.New()
 	r.Use(middleware.LoggerWithZap())
 	r.Use(middleware.RecoveryWithZap())
-	v1 := r.Group("/v1")
 
+	v1 := r.Group(apiversion)
 	auth := v1.Group("/auth")
 	auth.Use(j.MiddlewareFunc())
 	{
-		auth.GET("/del", h.DelAccount)
-		auth.GET("/account/:id", h.GetAccount)
+		auth.GET("/del", h.DeleteAccount)
+		auth.GET("/account/:id", h.ReadAccount)
 	}
 
 	v1.POST("/login", j.LoginHandler)
@@ -52,9 +56,8 @@ func (h *httpServer) JSON(c *gin.Context, data interface{}, errMsg string) {
 }
 
 type Login struct {
-	User     string `form:"user" json:"user" xml:"user"  binding:"required"`
-	Password string `form:"password" json:"password" xml:"password" binding:"required"`
-	Id       uint
+	Phone    string `form:"phone" json:"phone" binding:"required"`
+	Password string `form:"password" json:"password" binding:"required"`
 }
 
 func (h *httpServer) jwtAuthFunc(c *gin.Context) (interface{}, error) {
@@ -62,7 +65,7 @@ func (h *httpServer) jwtAuthFunc(c *gin.Context) (interface{}, error) {
 	if err := c.ShouldBindJSON(&json); err != nil {
 		return "", fmt.Errorf("error payload")
 	}
-	uid, err := h.srv.Login(json.User, json.Password)
+	uid, err := h.srv.Login(json.Phone, json.Password)
 	if err != nil {
 		return nil, err
 	}

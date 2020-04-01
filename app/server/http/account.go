@@ -7,23 +7,6 @@ import (
 	"strconv"
 )
 
-func (h *httpServer) GetAccount(c *gin.Context) {
-	var (
-		idFromQuery int
-		err         error
-	)
-	if idFromQuery, err = strconv.Atoi(c.Param("id")); err != nil {
-		h.JSON(c, nil, err.Error())
-		return
-	}
-	result, err := h.srv.GetAccount(idFromQuery)
-	if err != nil {
-		h.JSON(c, nil, err.Error())
-		return
-	}
-	h.JSON(c, result, "")
-}
-
 func (h *httpServer) CreateAccount(c *gin.Context) {
 	var id uint
 	acc := new(model.Account)
@@ -39,7 +22,28 @@ func (h *httpServer) CreateAccount(c *gin.Context) {
 	h.JSON(c, id, "")
 }
 
-func (h *httpServer) DelAccount(c *gin.Context) {
+func (h *httpServer) ReadAccount(c *gin.Context) {
+	var (
+		idFromQuery int
+		err         error
+	)
+	if idFromQuery, err = strconv.Atoi(c.Param("id")); err != nil {
+		h.JSON(c, nil, err.Error())
+		return
+	}
+	result, err := h.srv.ReadAccount(idFromQuery)
+	if err != nil {
+		h.JSON(c, nil, err.Error())
+		return
+	}
+	h.JSON(c, result, "")
+}
+
+func (h *httpServer) UpdateAccount(c *gin.Context) {
+
+}
+
+func (h *httpServer) DeleteAccount(c *gin.Context) {
 	var (
 		idFromQuery int
 		err         error
@@ -48,7 +52,7 @@ func (h *httpServer) DelAccount(c *gin.Context) {
 		h.JSON(c, nil, fmt.Sprintf("get id from url failed cause: %s", err.Error()))
 		return
 	}
-	err = h.srv.DelAccount(idFromQuery)
+	err = h.srv.DeleteAccount(idFromQuery)
 	if err != nil {
 		h.JSON(c, nil, fmt.Sprintf("del row failed cause: %s", err.Error()))
 		return

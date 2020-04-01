@@ -7,11 +7,10 @@ import (
 	"mall/app/internal/model"
 )
 
-func (s *Service) GetAccount(id int) (*model.Account, error) {
-	return s.dao.GetAccount(uint(id))
-}
-
 func (s *Service) CreateAccount(acc *model.Account) (uint, error) {
+	if _, err := s.dao.ReadAccountByPhone(acc.Phone); err == nil {
+		return 0, fmt.Errorf("phone has been registered")
+	}
 	if acc.Password != acc.PasswordReapt {
 		return 0, fmt.Errorf("repeat password check fail")
 	}
@@ -23,12 +22,16 @@ func (s *Service) CreateAccount(acc *model.Account) (uint, error) {
 	return s.dao.CreateAccount(acc)
 }
 
-func (s *Service) DelAccount(id int) error {
-	return s.dao.DelAccount(uint(id))
+func (s *Service) ReadAccount(id int) (*model.Account, error) {
+	return s.dao.ReadAccount(uint(id))
 }
 
-func (s *Service) Login(name string, password string) (uid uint, err error) {
-	acc, err := s.dao.GetAccountByName(name)
+func (s *Service) DeleteAccount(id int) error {
+	return s.dao.DeleteAccount(uint(id))
+}
+
+func (s *Service) Login(phone string, password string) (uid uint, err error) {
+	acc, err := s.dao.ReadAccountByPhone(phone)
 	if err != nil {
 		return 0, err
 	}

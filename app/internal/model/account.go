@@ -11,7 +11,7 @@ type Account struct {
 	Password      string `json:"password" binding:"required"`
 	PasswordReapt string `json:"repeat" binding:"required" gorm:"-"`
 	Avatar        string `json:"avatar"`
-	//AccountPrivacy
+	AccountPrivacy
 }
 
 type AccountPrivacy struct {
