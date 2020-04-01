@@ -6,6 +6,7 @@ import (
 
 type Account struct {
 	gorm.Model
+	UId           int64  `json:"uid" gorm:"index:uid;unique_index;not null"`
 	Name          string `json:"name" binding:"required"`
 	Email         string `json:"email" binding:"required"`
 	Password      string `json:"password" binding:"required"`

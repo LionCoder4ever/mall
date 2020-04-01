@@ -20,7 +20,7 @@ func main() {
 	}
 	// init log
 	NewLogger(conf.Conf.Log)
-	Logger.Info("conf load success", "from dsn ", conf.Conf.MySQL.DSN)
+	Logger.Info("conf load success ", "from dsn ", conf.Conf.MySQL.DSN)
 	Logger.Info("logger init success")
 	// init service
 	svc := service.New(&conf.Conf)

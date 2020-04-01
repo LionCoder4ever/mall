@@ -36,7 +36,7 @@ func New(svc *service.Service) {
 	auth.Use(j.MiddlewareFunc())
 	{
 		auth.GET("/del", h.DeleteAccount)
-		auth.GET("/account/:id", h.ReadAccount)
+		auth.GET("/account/:uid", h.ReadAccount)
 	}
 
 	v1.POST("/login", j.LoginHandler)
