@@ -7,6 +7,7 @@ import (
 	"mall/app/server/http"
 	"mall/app/service"
 	. "mall/library/log"
+	"mall/library/uuid"
 	"os"
 	"os/signal"
 	"syscall"
@@ -22,6 +23,11 @@ func main() {
 	NewLogger(conf.Conf.Log)
 	Logger.Info("conf load success ", "from dsn ", conf.Conf.MySQL.DSN)
 	Logger.Info("logger init success")
+	// init uuid
+	if err := uuid.NewUUID(); err != nil {
+		Logger.Errorf("service exit, uuid generator failed because %s", err.Error())
+		return
+	}
 	// init service
 	svc := service.New(&conf.Conf)
 	// init http server
