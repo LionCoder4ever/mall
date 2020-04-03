@@ -1,9 +1,13 @@
 package http
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/render"
+	"github.com/pkg/errors"
 	"mall/app/service"
+	"mall/library/ecode"
 	"mall/library/jwt"
 	"mall/library/log/middleware"
 	"net/http"
@@ -11,9 +15,46 @@ import (
 
 const apiversion = "/v1"
 
+var jsonContentType = []string{"application/json; charset=utf-8"}
+
 // http server
 type httpServer struct {
 	srv *service.Service
+}
+
+type Response struct {
+	Code    int
+	Message string
+	Data    interface{}
+}
+
+func writeJSON(w http.ResponseWriter, data interface{}) (err error) {
+	var jsonBytes []byte
+	writeContentType(w, jsonContentType)
+	if jsonBytes, err = json.Marshal(data); err != nil {
+		err = errors.WithStack(err)
+		return
+	}
+	if _, err = w.Write(jsonBytes); err != nil {
+		err = errors.WithStack(err)
+	}
+	return
+}
+
+func writeContentType(w http.ResponseWriter, value []string) {
+	header := w.Header()
+	if val := header["Content-Type"]; len(val) == 0 {
+		header["Content-Type"] = value
+	}
+}
+
+func (r Response) Render(w http.ResponseWriter) (err error) {
+	return writeJSON(w, r)
+}
+
+// WriteContentType write json ContentType.
+func (r Response) WriteContentType(w http.ResponseWriter) {
+	writeContentType(w, jsonContentType)
 }
 
 // Init init
@@ -44,6 +85,19 @@ func New(svc *service.Service) {
 	//v1.POST("/shop/register", h.CreateShop)
 	//v1.GET("/shop/info/:id", h.GetShop)
 	go r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+}
+
+/**
+transfer err code to msg
+*/
+func (h *httpServer) WrapResponse(data interface{}, err error) (int, render.Render) {
+	code := http.StatusOK
+	customCode := ecode.Cause(err)
+	return code, Response{
+		Code:    customCode.Code(),
+		Message: customCode.Message(),
+		Data:    data,
+	}
 }
 
 func (h *httpServer) JSON(c *gin.Context, data interface{}, errMsg string) {

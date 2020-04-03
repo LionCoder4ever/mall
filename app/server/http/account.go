@@ -27,15 +27,15 @@ func (h *httpServer) ReadAccount(c *gin.Context) {
 		err error
 	)
 	if uid, err = strconv.ParseInt(c.Param("uid"), 10, 64); err != nil {
-		h.JSON(c, nil, err.Error())
+		c.Render(h.WrapResponse(nil, err))
 		return
 	}
 	result, err := h.srv.ReadAccount(uid)
 	if err != nil {
-		h.JSON(c, nil, err.Error())
+		c.Render(h.WrapResponse(nil, err))
 		return
 	}
-	h.JSON(c, result, "")
+	c.Render(h.WrapResponse(result, err))
 }
 
 func (h *httpServer) UpdateAccount(c *gin.Context) {

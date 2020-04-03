@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
 	"mall/app/internal/model"
+	"mall/library/ecode"
 	"mall/library/uuid"
 )
 
@@ -20,16 +21,18 @@ func (s *Service) CreateAccount(acc *model.Account) (int64, error) {
 		return 0, fmt.Errorf("generate password failed case: %s", err.Error())
 	}
 	acc.Password = string(bcryptByte)
-	if uid, err := uuid.UUID(); err != nil {
-		return 0, fmt.Errorf("uid generated failed %s", err.Error())
-	} else {
-		acc.UId = uid
-	}
+	acc.UId = uuid.UUID()
 	return s.dao.CreateAccount(acc)
 }
 
-func (s *Service) ReadAccount(uid int64) (*model.Account, error) {
-	return s.dao.ReadAccount(uid)
+func (s *Service) ReadAccount(uid int64) (res *model.Account, err error) {
+	if res, err = s.dao.ReadAccount(uid); err != nil {
+		return nil, err
+	}
+	if res == nil {
+		return nil, ecode.AccountNotFound
+	}
+	return res, nil
 }
 
 func (s *Service) DeleteAccount(id int64) error {
