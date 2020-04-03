@@ -2,6 +2,7 @@ package ecode
 
 import (
 	"fmt"
+	"github.com/pkg/errors"
 	"strconv"
 	"sync/atomic"
 )
@@ -22,6 +23,29 @@ func New(e int) Code {
 	return add(e)
 }
 
+func String(e string) Code {
+	if e == "" {
+		return OK
+	}
+	// try error string
+	i, err := strconv.Atoi(e)
+	if err != nil {
+		return ServerErr
+	}
+	return Code(i)
+}
+
+// Cause cause from error to ecode.
+func Cause(e error) Codes {
+	if e == nil {
+		return OK
+	}
+	ec, ok := errors.Cause(e).(Codes)
+	if ok {
+		return ec
+	}
+	return String(e.Error())
+}
 func Int(i int) Code { return Code(i) }
 
 func add(e int) Code {
