@@ -1,24 +1,26 @@
 package http
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"mall/app/internal/model"
+	"mall/library/ecode"
+	"mall/library/log"
 	"strconv"
 )
 
 func (h *httpServer) CreateAccount(c *gin.Context) {
 	acc := new(model.Account)
 	if err := c.ShouldBindJSON(acc); err != nil {
-		h.JSON(c, nil, fmt.Sprintf("json parse failed %s", err.Error()))
+		log.Logger.Errorf("json parse failed %s", err.Error())
+		c.Render(h.WrapResponse(nil, ecode.ParameterErr))
 		return
 	}
 	uid, err := h.srv.CreateAccount(acc)
 	if err != nil {
-		h.JSON(c, nil, err.Error())
+		c.Render(h.WrapResponse(nil, err))
 		return
 	}
-	h.JSON(c, uid, "")
+	c.Render(h.WrapResponse(uid, err))
 }
 
 func (h *httpServer) ReadAccount(c *gin.Context) {
@@ -48,13 +50,15 @@ func (h *httpServer) DeleteAccount(c *gin.Context) {
 		err error
 	)
 	if uid, err = strconv.ParseInt(c.Query("id"), 10, 64); err != nil {
-		h.JSON(c, nil, fmt.Sprintf("get id from url failed cause: %s", err.Error()))
+		log.Logger.Errorf("get id from url failed cause: %s", err.Error())
+		c.Render(h.WrapResponse(nil, ecode.ParameterErr))
 		return
 	}
 	err = h.srv.DeleteAccount(uid)
 	if err != nil {
-		h.JSON(c, nil, fmt.Sprintf("del row failed cause: %s", err.Error()))
+		log.Logger.Errorf("del row failed cause: %s", err.Error())
+		c.Render(h.WrapResponse(nil, err))
 		return
 	}
-	h.JSON(c, nil, "")
+	c.Render(h.WrapResponse(nil, nil))
 }

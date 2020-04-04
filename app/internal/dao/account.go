@@ -17,7 +17,7 @@ func (d *Dao) CreateAccount(acc *model.Account) (id int64, err error) {
 			}
 			return acc.UId, nil
 		}
-		log.Logger.Error("create account failed when check is exist cause %s", err.Error())
+		log.Logger.Error("create account failed when check is exit cause %s", err.Error())
 		return
 	}
 	return

@@ -22,6 +22,7 @@ type httpServer struct {
 	srv *service.Service
 }
 
+// http
 type Response struct {
 	Code    int
 	Message string
@@ -101,7 +102,6 @@ func (h *httpServer) WrapResponse(data interface{}, err error) (int, render.Rend
 }
 
 func (h *httpServer) JSON(c *gin.Context, data interface{}, errMsg string) {
-	// TODO custom error status code
 	c.JSON(http.StatusOK, gin.H{
 		"code":    0,
 		"message": errMsg,

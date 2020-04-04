@@ -2,23 +2,24 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"golang.org/x/crypto/bcrypt"
 	"mall/app/internal/model"
 	"mall/library/ecode"
+	"mall/library/log"
 	"mall/library/uuid"
 )
 
 func (s *Service) CreateAccount(acc *model.Account) (int64, error) {
 	if _, err := s.dao.ReadAccountByPhone(acc.Phone); err == nil {
-		return 0, fmt.Errorf("phone has been registered")
+		return 0, ecode.PhoneHasBeenRegistered
 	}
 	if acc.Password != acc.PasswordReapt {
-		return 0, fmt.Errorf("repeat password check fail")
+		return 0, ecode.PwdRepeatCheckErr
 	}
 	bcryptByte, err := bcrypt.GenerateFromPassword([]byte(acc.Password), 12)
 	if err != nil {
-		return 0, fmt.Errorf("generate password failed case: %s", err.Error())
+		log.Logger.Errorf("generate password failed case: %s", err.Error())
+		return 0, ecode.SavePwdErr
 	}
 	acc.Password = string(bcryptByte)
 	acc.UId = uuid.UUID()
