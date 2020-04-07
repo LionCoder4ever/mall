@@ -4,9 +4,9 @@ import (
 	"flag"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
-	"mall/app/conf"
-	"mall/app/internal/model"
-	"mall/library/database/sql"
+	"mall/internal/app/account"
+	"mall/internal/pkg/conf"
+	"mall/internal/pkg/database/sql"
 )
 
 func main() {
@@ -17,8 +17,8 @@ func main() {
 	// init service
 	//&conf.Conf
 	db := sql.NewSql(conf.Conf.MySQL)
-	db.AutoMigrate(&model.Account{})
-	db.Model(&model.Account{}).AddUniqueIndex("uid", "uid")
+	db.AutoMigrate(&account.Account{})
+	db.Model(&account.Account{}).AddUniqueIndex("uid", "uid")
 
 	db.Close()
 }

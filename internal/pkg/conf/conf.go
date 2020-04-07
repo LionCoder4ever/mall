@@ -4,8 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"github.com/BurntSushi/toml"
-	"mall/library/database/sql"
-	"mall/library/log"
+	"mall/internal/pkg/database/sql"
+	"mall/internal/pkg/log"
 )
 
 type Config struct {

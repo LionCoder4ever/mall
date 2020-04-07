@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
-	"mall/library/log"
+	"mall/internal/pkg/log"
 	"net"
 	"net/http"
 	"net/http/httputil"

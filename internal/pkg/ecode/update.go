@@ -21,7 +21,7 @@ var (
 	defualtEcodes = &ecodes{}
 )
 
-// Init init ecode.
+// Init init ecode from ecode service
 func Init() {
 	defualtEcodes.codes.Store(make(map[int]string))
 	ver, _ := defualtEcodes.update(0)

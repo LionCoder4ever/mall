@@ -3,7 +3,7 @@
 
 [log]
     DEV = true
-    FILE = "logs/app.log"
-    MAXSIZE = 100
+    FILE = "../logs/app.log"
+    MAXSIZE = 5
     MAXBACKUPS = 3
     MAXAGE = 1
