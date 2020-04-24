@@ -5,20 +5,20 @@ import (
 )
 
 type Account struct {
-	gorm.Model
+	gorm.Model    `json:"-"`
 	UId           int64  `json:"uid" gorm:"index:uid;unique_index;not null"`
 	Name          string `json:"name" binding:"required"`
 	Email         string `json:"email" binding:"required"`
-	Password      string `json:"password" binding:"required"`
-	PasswordReapt string `json:"repeat" binding:"required" gorm:"-"`
+	Password      string `json:"password,omitempty" binding:"required"`
+	PasswordReapt string `json:"repeat,omitempty" binding:"required" gorm:"-"`
 	Avatar        string `json:"avatar"`
 	AccountPrivacy
 }
 
 type AccountPrivacy struct {
-	RealName string `json:"real_name"`
-	IdCard   string
-	Phone    string
-	RegistIp string
-	HandImg  string
+	RealName string `json:",omitempty"`
+	IdCard   string `json:",omitempty"`
+	Phone    string `json:",omitempty" binding:"required"`
+	RegistIp string `json:",omitempty"`
+	HandImg  string `json:",omitempty"`
 }

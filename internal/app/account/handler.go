@@ -43,6 +43,8 @@ func ReadAccount(c *gin.Context) {
 		c.Render(http.WrapResponse(nil, err))
 		return
 	}
+	result.Password = ""
+	result.AccountPrivacy = AccountPrivacy{}
 	c.Render(http.WrapResponse(result, err))
 }
 
