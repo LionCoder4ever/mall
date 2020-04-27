@@ -71,12 +71,12 @@ func NewServer() {
 	auth := v1.Group("/auth")
 	auth.Use(j.MiddlewareFunc())
 	{
-		auth.GET("/del", account.DeleteAccount)
-		auth.GET("/account/:uid", account.ReadAccount)
+		auth.GET("/del", account.Destroy)
+		auth.GET("/account/:uid", account.Show)
 	}
 
 	v1.POST("/login", j.LoginHandler)
-	v1.POST("/register", account.CreateAccount)
+	v1.POST("/register", account.Store)
 	go r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
 

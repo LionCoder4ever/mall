@@ -14,7 +14,7 @@ func NewAccountService() {
 	accService = &service{}
 }
 
-func CreateAccount(c *gin.Context) {
+func Store(c *gin.Context) {
 	acc := new(Account)
 	if err := c.ShouldBindJSON(acc); err != nil {
 		log.Logger.Errorf("json parse failed %s", err.Error())
@@ -29,7 +29,7 @@ func CreateAccount(c *gin.Context) {
 	c.Render(http.WrapResponse(uid, err))
 }
 
-func ReadAccount(c *gin.Context) {
+func Show(c *gin.Context) {
 	var (
 		uid int64
 		err error
@@ -48,11 +48,15 @@ func ReadAccount(c *gin.Context) {
 	c.Render(http.WrapResponse(result, err))
 }
 
-func UpdateAccount(c *gin.Context) {
+func Index(c *gin.Context) {
 
 }
 
-func DeleteAccount(c *gin.Context) {
+func Update(c *gin.Context) {
+
+}
+
+func Destroy(c *gin.Context) {
 	var (
 		uid int64
 		err error

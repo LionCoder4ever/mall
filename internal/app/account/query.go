@@ -7,7 +7,7 @@ import (
 	"mall/internal/pkg/log"
 )
 
-func DCreateAccount(acc *Account) (id int64, err error) {
+func CreateAccount(acc *Account) (id int64, err error) {
 	// if not found, create the record
 	if err = dao.Db.Where("uid = ?", acc.UId).First(acc).Error; err != nil {
 		if gorm.IsRecordNotFoundError(err) {
@@ -23,7 +23,7 @@ func DCreateAccount(acc *Account) (id int64, err error) {
 	return
 }
 
-func DReadAccount(uid int64) (*Account, error) {
+func ReadAccount(uid int64) (*Account, error) {
 	acc := new(Account)
 	if err := dao.Db.Where("uid = ?", uid).First(acc).Error; err != nil {
 		if gorm.IsRecordNotFoundError(err) {
@@ -35,7 +35,7 @@ func DReadAccount(uid int64) (*Account, error) {
 	return acc, nil
 }
 
-func DReadAccountByPhone(phone string) (*Account, error) {
+func ReadAccountByPhone(phone string) (*Account, error) {
 	acc := new(Account)
 	if dao.Db.Where("phone = ?", phone).First(acc).RecordNotFound() {
 		return acc, errors.New("id not found")
@@ -43,7 +43,7 @@ func DReadAccountByPhone(phone string) (*Account, error) {
 	return acc, nil
 }
 
-func DDeleteAccount(uid int64) error {
+func DeleteAccount(uid int64) error {
 	// set the delete_at field , use db.Unscoped().Delete() delete the row
 	if err := dao.Db.Where("uid = ?", uid).Delete(Account{}).Error; err != nil {
 		return err

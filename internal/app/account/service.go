@@ -19,7 +19,7 @@ type service struct {
 }
 
 func (g *service) CreateAccount(acc *Account) (int64, error) {
-	if _, err := DReadAccountByPhone(acc.Phone); err == nil {
+	if _, err := ReadAccountByPhone(acc.Phone); err == nil {
 		return 0, ecode.PhoneHasBeenRegistered
 	}
 	if acc.Password != acc.PasswordReapt {
@@ -32,11 +32,11 @@ func (g *service) CreateAccount(acc *Account) (int64, error) {
 	}
 	acc.Password = string(bcryptByte)
 	acc.UId = uuid.UUID()
-	return DCreateAccount(acc)
+	return CreateAccount(acc)
 }
 
 func (g *service) ReadAccount(uid int64) (res *Account, err error) {
-	if res, err = DReadAccount(uid); err != nil {
+	if res, err = ReadAccount(uid); err != nil {
 		return nil, err
 	}
 	if res == nil {
@@ -46,11 +46,11 @@ func (g *service) ReadAccount(uid int64) (res *Account, err error) {
 }
 
 func (g *service) DeleteAccount(id int64) error {
-	return DDeleteAccount(id)
+	return DeleteAccount(id)
 }
 
 func (g *service) Login(phone string, password string) (uid uint, err error) {
-	acc, err := DReadAccountByPhone(phone)
+	acc, err := ReadAccountByPhone(phone)
 	if err != nil {
 		return 0, err
 	}
